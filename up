@@ -1,0 +1,22 @@
+#!/bin/bash
+
+self(){
+  DIR=$( cd "$( dirname "$0" )/" && pwd)
+  echo $DIR
+}
+
+docker stop xrpl-testnet
+docker rm xrpl-testnet
+docker rmi xrpllabsofficial/xrpld:latest
+
+docker run -dit \
+    --name xrpl-testnet \
+    --restart=always \
+    -p 8181:8181 \
+    -p 8282:8282 \
+    -v $(self):/config/ \
+    -v $(self)/db/:/etc/opt/ripple-db/ \
+    xrpllabsofficial/xrpld:latest
+
+
+
